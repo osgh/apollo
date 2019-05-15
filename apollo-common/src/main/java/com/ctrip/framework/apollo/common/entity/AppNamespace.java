@@ -3,41 +3,42 @@ package com.ctrip.framework.apollo.common.entity;
 
 import com.ctrip.framework.apollo.common.utils.InputValidator;
 import com.ctrip.framework.apollo.core.enums.ConfigFileFormat;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @Entity
-@Table(name = "AppNamespace")
-@SQLDelete(sql = "Update AppNamespace set isDeleted = 1 where id = ?")
-@Where(clause = "isDeleted = 0")
+@Table(name = "app_namespace")
+@SQLDelete(sql = "UPDATE app_namespace SET deleted = TRUE WHERE id = ?")
+@Where(clause = "NOT deleted")
+@SequenceGenerator(name = "sequence", sequenceName = "app_namespace_id_seq", allocationSize = 1)
 public class AppNamespace extends BaseEntity {
 
   @NotBlank(message = "App Name cannot be blank")
   @Pattern(
-      regexp = InputValidator.CLUSTER_NAMESPACE_VALIDATOR,
-      message = "Namespace格式错误: " + InputValidator.INVALID_CLUSTER_NAMESPACE_MESSAGE + " & " + InputValidator.INVALID_NAMESPACE_NAMESPACE_MESSAGE
+          regexp = InputValidator.CLUSTER_NAMESPACE_VALIDATOR,
+          message = "Namespace格式错误: " + InputValidator.INVALID_CLUSTER_NAMESPACE_MESSAGE + " & " + InputValidator.INVALID_NAMESPACE_NAMESPACE_MESSAGE
   )
-  @Column(name = "Name", nullable = false)
+  @Column(name = "namespace_name", nullable = false)
   private String name;
 
   @NotBlank(message = "AppId cannot be blank")
-  @Column(name = "AppId", nullable = false)
+  @Column(name = "app_id", nullable = false)
   private String appId;
 
-  @Column(name = "Format", nullable = false)
+  @Column(name = "format", nullable = false)
   private String format;
 
-  @Column(name = "IsPublic", columnDefinition = "Bit default '0'")
+  @Column(name = "is_public")
   private boolean isPublic = false;
 
-  @Column(name = "Comment")
+  @Column(name = "comment")
   private String comment;
 
   public String getAppId() {
@@ -68,8 +69,8 @@ public class AppNamespace extends BaseEntity {
     return isPublic;
   }
 
-  public void setPublic(boolean aPublic) {
-    isPublic = aPublic;
+  public void setPublic(boolean isPublic) {
+    this.isPublic = isPublic;
   }
 
   public ConfigFileFormat formatAsEnum() {

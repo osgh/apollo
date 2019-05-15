@@ -1,26 +1,27 @@
 package com.ctrip.framework.apollo.portal.entity.po;
 
 import com.ctrip.framework.apollo.common.entity.BaseEntity;
-
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
  * @author Jason Song(song_s@ctrip.com)
  */
 @Entity
-@Table(name = "Permission")
-@SQLDelete(sql = "Update Permission set isDeleted = 1 where id = ?")
-@Where(clause = "isDeleted = 0")
+@Table(name = "permission")
+@SQLDelete(sql = "UPDATE permission SET deleted = TRUE WHERE id = ?")
+@Where(clause = "NOT deleted")
+@SequenceGenerator(name = "sequence", sequenceName = "permission_id_seq", allocationSize = 1)
 public class Permission extends BaseEntity {
-  @Column(name = "PermissionType", nullable = false)
+  @Column(name = "permission_type", nullable = false)
   private String permissionType;
 
-  @Column(name = "TargetId", nullable = false)
+  @Column(name = "target_id", nullable = false)
   private String targetId;
 
   public String getPermissionType() {

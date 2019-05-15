@@ -1,19 +1,20 @@
 package com.ctrip.framework.apollo.biz.entity;
 
 import com.ctrip.framework.apollo.common.entity.BaseEntity;
-
 import org.hibernate.annotations.Where;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "NamespaceLock")
-@Where(clause = "isDeleted = 0")
-public class NamespaceLock extends BaseEntity{
+@Table(name = "namespace_lock")
+@Where(clause = "NOT deleted")
+@SequenceGenerator(name = "sequence", sequenceName = "namespace_lock_id_seq", allocationSize = 1)
+public class NamespaceLock extends BaseEntity {
 
-  @Column(name = "NamespaceId")
+  @Column(name = "namespace_id")
   private long namespaceId;
 
   public long getNamespaceId() {

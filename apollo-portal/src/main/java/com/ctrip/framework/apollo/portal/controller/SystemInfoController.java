@@ -96,7 +96,8 @@ public class SystemInfoController {
       throw new IllegalArgumentException("No such instance of instanceId: " + instanceId);
     }
 
-    return restTemplate.getForObject(service.getHomepageUrl() + "/health", Health.class);
+    //logger.info("service.getHomepageUrl()={}", service.getHomepageUrl());
+    return restTemplate.getForObject(service.getHomepageUrl() + "/actuator/health", Health.class);
   }
 
   private EnvironmentInfo adaptEnv2EnvironmentInfo(final Env env) {

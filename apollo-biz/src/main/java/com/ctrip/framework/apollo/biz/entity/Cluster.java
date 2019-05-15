@@ -1,30 +1,31 @@
 package com.ctrip.framework.apollo.biz.entity;
 
 import com.ctrip.framework.apollo.common.entity.BaseEntity;
-
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 /**
  * @author Jason Song(song_s@ctrip.com)
  */
 @Entity
-@Table(name = "Cluster")
-@SQLDelete(sql = "Update Cluster set isDeleted = 1 where id = ?")
-@Where(clause = "isDeleted = 0")
+@Table(name = "cluster")
+@SQLDelete(sql = "UPDATE cluster SET deleted = TRUE WHERE id = ?")
+@Where(clause = "NOT deleted")
+@SequenceGenerator(name = "sequence", sequenceName = "cluster_id_seq", allocationSize = 1)
 public class Cluster extends BaseEntity implements Comparable<Cluster> {
 
-  @Column(name = "Name", nullable = false)
+  @Column(name = "cluster_name", nullable = false)
   private String name;
 
-  @Column(name = "AppId", nullable = false)
+  @Column(name = "app_id", nullable = false)
   private String appId;
 
-  @Column(name = "ParentClusterId", nullable = false)
+  @Column(name = "parent_cluster_id", nullable = false)
   private long parentClusterId;
 
   public String getAppId() {
